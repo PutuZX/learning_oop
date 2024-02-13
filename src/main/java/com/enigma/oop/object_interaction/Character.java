@@ -4,11 +4,13 @@ public class Character implements Actions {
     private String name;
     private int HP;
     private int damage;
+    private int shield;
 
-    Character(String name, int HP, int damage){
+    Character(String name, int HP, int damage, int shield){
         this.name = name;
         this.HP = HP;
         this.damage = damage;
+        this.shield = shield;
     }
 
     public void setName(String name){
@@ -23,6 +25,10 @@ public class Character implements Actions {
         this.damage = damage;
     }
 
+    public void setShield(int shield){
+        this.shield = shield;
+    }
+
     public String getName(){
         return this.name;
     }
@@ -35,6 +41,10 @@ public class Character implements Actions {
         return this.damage;
     }
 
+    public int getShield(){
+        return this.shield;
+    }
+
     @Override
     public void HPRules(int HP){
         if(HP <= 0){
@@ -45,17 +55,37 @@ public class Character implements Actions {
             setHP(HP);
         }
     }
+
+    @Override
+    public void ShieldRules(int Shield){
+        if(Shield <= 0){
+            setShield(0);
+        } else{
+            setShield(Shield);
+        }
+    }
    
     @Override
     public void getHit(int damage){
         int currentHP = getHP();
-        if(getHP() <= 0){
-            System.out.printf("%s is killed!\n", getName());
+        int currentShield = getShield();
+        if(getShield() <= 0){
+            if(getHP() <= 0){
+                System.out.printf("%s is killed!\n", getName());
+            } else{
+                currentHP -= damage;
+                System.out.printf("%s got %d damage\n", getName(), damage);
+            }
+            HPRules(currentHP);
         } else{
-            currentHP -= damage;
-            System.out.printf("%s got %d damage\n", getName(), damage);
+            currentShield -= damage;
+            System.out.println();
+            System.out.printf("%s's shield hitted by %d damage%n", getName(), damage);
+            if(currentShield <= 0){
+                System.out.printf("%s's shield is broken%n", getName());
+            }
+            ShieldRules(currentShield);
         }
-        HPRules(currentHP);
     }
 
     @Override
