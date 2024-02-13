@@ -5,41 +5,49 @@ import java.util.Scanner;
 public class App {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
+        int round = 0;
+        int winner = 0;
         Hero hero1 = heroPick("1st", input);
         System.out.println("\n"+hero1);
         Hero hero2 = heroPick("2nd", input);
         System.out.println("\n"+hero2);
-        Monster spider = new Monster("Spider", 50, 10);
-        Tower basicTower = new Tower("Basic Tower", 100, 15, 200);
+        // Monster spider = new Monster("Spider", 50, 10);
+        // Tower basicTower = new Tower("Basic Tower", 100, 15, 200);
+        
+        while(true){
+            if(hero1.getHP() == 0 || hero2.getHP() == 0){
+                if(hero1.getHP() < hero2.getHP()){
+                    winner = 2;
+                    System.out.printf("%s is win!%n", hero2.getName());
+                }
+                else{
+                    winner = 1;
+                    System.out.printf("%s is win!%n", hero1.getName());
+                }
+                break;
+            } else{
+                round++;
+                System.out.printf("%nRound %d Start!%n", round);
+                int attacker = 1;
+                for(int i = 0; i<2; i++){
+                    if(attacker == 1){
+                        attacker = heroTurn(hero1, hero2, attacker);
+                    } else{
+                        attacker = heroTurn(hero2, hero1, attacker);
+                    }
+                }
+                
+            }
+        }
+    }
 
-        hero1.Attacking(hero2);
-        hero2.Attacking(hero1);
-        System.out.println(hero1);
-        System.out.println(hero2);
-        spider.Attacking(hero1);
-        basicTower.Attacking(hero1);
-        System.out.println(hero1);
-        hero1.Attacking(spider);
-        hero1.Attacking(basicTower);
-        System.out.println(spider);
-        System.out.println(basicTower);
-        basicTower.Attacking(hero1);
-        System.out.println(hero1);
-        System.out.println(hero1);
-        // zilong.getHit(110);
-        // zilong.getHit(1);
-        // System.out.println(zilong);
-        // zilong.Healing(zilong);
-        // System.out.println(zilong);
-        // zilong.Attacking(natalia);
-        // System.out.println(natalia);
-        // spider.Attacking(natalia);
-        // System.out.println(natalia);
-        // basicTower.Attacking(natalia);
-        // System.out.println(natalia);
-        // natalia.Attacking(basicTower);
-        // System.out.println(basicTower);
-        // heroPick("1st",input);
+    static Integer heroTurn(Hero hero, Hero opponent, int attacker){
+        if(hero.getHP() > 0){
+            hero.Attacking(opponent);
+            System.out.println(opponent);
+            attacker = (attacker == 1) ? 2 : 1;
+        }
+        return attacker;
     }
 
     static Hero heroPick(String heroNum, Scanner input){
